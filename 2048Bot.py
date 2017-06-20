@@ -24,6 +24,12 @@ board[3][1] = 1110, 1194
 board[3][2] = 1352, 1194
 board[3][3] = 1594, 1194
 
+title = pyautogui.locateOnScreen('title.png')
+titlex, titley = pyautogui.center(title)
+print(titlex, titley)
+pyautogui.moveTo(titlex, titley)
+pyautogui.dragTo(902, 300, button='left')
+
 def print_board():
   print(' ' + str(gboard[0][0]) + ' ' + str(gboard[0][1]) + ' ' + str(gboard[0][2]) + ' ' + str(gboard[0][3]))
   print(' |' + ' |' + ' |' + ' |')

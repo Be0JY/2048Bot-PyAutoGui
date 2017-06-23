@@ -2,6 +2,7 @@ import pyautogui
 from random import randint
 import time
 
+im = pyautogui.screenshot()
 w, h = 4, 4
 
 board = [[0 for x in range(w)] for y in range(h)] 
@@ -23,12 +24,6 @@ board[3][0] = 868, 1194
 board[3][1] = 1110, 1194
 board[3][2] = 1352, 1194
 board[3][3] = 1594, 1194
-
-title = pyautogui.locateOnScreen('title.png')
-titlex, titley = pyautogui.center(title)
-print(titlex, titley)
-pyautogui.moveTo(titlex, titley)
-pyautogui.dragTo(902, 300, button='left')
 
 def print_board():
   print(' ' + str(gboard[0][0]) + ' ' + str(gboard[0][1]) + ' ' + str(gboard[0][2]) + ' ' + str(gboard[0][3]))
@@ -1027,11 +1022,10 @@ def brute_move():
   if r_moves == d_moves and r_moves == u_moves and r_moves > l_moves:
     pyautogui.prees('right')
     print('board is moving right')
-  
-count = 0      
+
+count = 0
 while True:
   count += 1
-  print(count)
   im = pyautogui.screenshot()
   gboard = [[0 for x in range(w)] for y in range(h)] 
   for i in range(0, 4):
@@ -1042,7 +1036,7 @@ while True:
         if board_space == (237, 224, 200, 255):
             gboard[i][j] = 4
         if board_space == (242, 177, 121, 255):
-             gboard[i][j] = 8
+            gboard[i][j] = 8
         if board_space == (245, 149, 99, 255):
             gboard[i][j] = 16
         if board_space == (246, 124, 95, 255):
@@ -1054,7 +1048,8 @@ while True:
         if board_space == (237, 204, 97, 255):
             gboard[i][j] = 256
         if board_space == (237, 200, 80, 255):
-            gboard[i][j] = 512   
+            gboard[i][j] = 512 
+  
   print_board()
   print(' ')
   if count == 1:
@@ -1065,3 +1060,7 @@ while True:
     pyautogui.press('down')
   if count > 2:
     brute_move()
+    time.sleep(1)
+
+
+

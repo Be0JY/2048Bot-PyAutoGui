@@ -2,12 +2,10 @@ import pyautogui
 from random import randint
 import time
 
-im = pyautogui.screenshot()
 w, h = 4, 4
-
 board = [[0 for x in range(w)] for y in range(h)] 
 temp_board = [[0 for x in range(w)] for y in range(h)] 
- 
+
 board[0][0] = 868, 468
 board[0][1] = 1110, 468
 board[0][2] = 1352, 468
@@ -36,103 +34,528 @@ def print_board():
   print(' ' + str(gboard[3][0]) + ' ' + str(gboard[3][1]) + ' ' + str(gboard[3][2])
   + ' ' + str(gboard[3][3]))
               
-def combine():
+def  combine():
   for i in range(0, 4):
     for j in range(0, 4):
-      temp_board[i][j] = gboard[i][j]
-      
+      temp_board[i][j] = gboard[i][j] 
+
+def botright(points):
+  for i in range(0, 4):
+    for j in range(0, 4):
+      if gboard[3][3] >= gboard[i][j]:
+        return("None")
+      else:
+        points - 10
+        break
+   
 def brute_move(): 
-  def shiftup():
-    for j in range(0,4):
-      if temp_board[1][j] != 0:
-        if temp_board[0][j] == 0:
-          temp_board[0][j] = temp_board[1][j]
-          temp_board[1][j] = 0
+  
+  moves = [0,1,0,1]
+  tree_moves = [0,1,0,1]
+  #shiftup  
+  for j in range(0,4):
+    if temp_board != 0:
+      if temp_board[0][j] == 0:
+        temp_board[0][j] = temp_board[1][j]
+        temp_board[1][j] = 0
        
-        if temp_board[2][j] != 0 and temp_board[1][j] == 0:
+      if temp_board[2][j] != 0 and temp_board[1][j] == 0:
+        temp_board[1][j] = temp_board[2][j]
+        temp_board[2][j] = 0
+      if temp_board[0][j] == 0:
+        temp_board[0][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+      
+      if temp_board[3][j] != 0 and temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[3][j]
+        temp_board[3][j] = 0
+        if temp_board[1][j] == 0:
           temp_board[1][j] = temp_board[2][j]
           temp_board[2][j] = 0
-        if temp_board[0][j] == 0:
-          temp_board[0][j] = temp_board[1][j]
-          temp_board[1][j] = 0
-      
-        if temp_board[3][j] != 0 and temp_board[2][j] == 0:
-          temp_board[2][j] = temp_board[3][j]
-          temp_board[3][j] = 0
-          if temp_board[1][j] == 0:
-            temp_board[1][j] = temp_board[2][j]
-            temp_board[2][j] = 0
-            if temp_board[0][j] == 0:
-              temp_board[0][j] = temp_board[1][j]
-              temp_board[1][j] = 0
+          if temp_board[0][j] == 0:
+            temp_board[0][j] = temp_board[1][j]
+            temp_board[1][j] = 0
               
-        if temp_board[0][j] != 0 and temp_board[0][j] == temp_board[1][j]:
-          if temp_board[2][j] == temp_board[3][j]:
-            temp_board[0][j] = temp_board[1][j]*2
-            temp_board[1][j] = temp_board[2][j]*2
-            temp_board[2][j] = 0
-            temp_board[3][j] = 0
-          else:
-            temp_board[0][j] = temp_board[1][j]*2
-            temp_board[1][j] = temp_board[2][j]
-            temp_board[2][j] = temp_board[3][j]
-            temp_board[3][j] = 0
-        
-        if temp_board[2][j] != 0 and temp_board[2][j] == temp_board[1][j]:
+      if temp_board[0][j] != 0 and temp_board[0][j] == temp_board[1][j]:
+        if temp_board[2][j] == temp_board[3][j]:
+          temp_board[0][j] = temp_board[1][j]*2
           temp_board[1][j] = temp_board[2][j]*2
+          temp_board[2][j] = 0
+          temp_board[3][j] = 0
+          moves[0] = temp_board[0][j] + temp_board[1][j] + moves[0]
+        else:
+          temp_board[0][j] = temp_board[1][j]*2
+          temp_board[1][j] = temp_board[2][j]
           temp_board[2][j] = temp_board[3][j]
           temp_board[3][j] = 0
-                   
-        if temp_board[3][j] != 0 and temp_board[2][j] == temp_board[3][j]:
-          temp_board[3][j] = temp_board[2][j]*2
+          moves[0] = temp_board[0][j] + moves[0]
+       
+      if temp_board[2][j] != 0 and temp_board[2][j] == temp_board[1][j]:
+        temp_board[1][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[3][j]
+        temp_board[3][j] = 0
+        moves[0] = temp_board[1][j] + moves[0]
+        
+      if temp_board[3][j] != 0 and temp_board[2][j] == temp_board[3][j]:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[3][j] = 0
+        moves[0] = temp_board[3][j] + temp_board[2][j] + moves[0]
+        
+  combine() 
+  #shiftup tree 1
+  for j in range(0,4):
+    if temp_board != 0:
+      if temp_board[0][j] == 0:
+        temp_board[0][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+       
+      if temp_board[2][j] != 0 and temp_board[1][j] == 0:
+        temp_board[1][j] = temp_board[2][j]
+        temp_board[2][j] = 0
+      if temp_board[0][j] == 0:
+        temp_board[0][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+      
+      if temp_board[3][j] != 0 and temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[3][j]
+        temp_board[3][j] = 0
+        if temp_board[1][j] == 0:
+          temp_board[1][j] = temp_board[2][j]
+          temp_board[2][j] = 0
+          if temp_board[0][j] == 0:
+            temp_board[0][j] = temp_board[1][j]
+            temp_board[1][j] = 0
+              
+      if temp_board[0][j] != 0 and temp_board[0][j] == temp_board[1][j]:
+        if temp_board[2][j] == temp_board[3][j]:
+          temp_board[0][j] = temp_board[1][j]*2
+          temp_board[1][j] = temp_board[2][j]*2
+          temp_board[2][j] = 0
           temp_board[3][j] = 0
-  def shiftdown():
-    for j in range(0, 4):
-      if temp_board[2][j] != 0:
+          tree_moves[0] = temp_board[0][j] + temp_board[1][j] + tree_moves[0]
+        else:
+          temp_board[0][j] = temp_board[1][j]*2
+          temp_board[1][j] = temp_board[2][j]
+          temp_board[2][j] = temp_board[3][j]
+          temp_board[3][j] = 0
+          tree_moves[0] = temp_board[0][j] + tree_moves[0]
+       
+      if temp_board[2][j] != 0 and temp_board[2][j] == temp_board[1][j]:
+        temp_board[1][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[3][j]
+        temp_board[3][j] = 0
+        tree_moves[0] = temp_board[1][j] + tree_moves[0]
+        
+      if temp_board[3][j] != 0 and temp_board[2][j] == temp_board[3][j]:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[3][j] = 0
+        tree_moves[0] = temp_board[3][j] + temp_board[2][j] + tree_moves[0]
+
+  combine()
+  #shiftdown tree 1
+  for j in range(0, 4):
+    if temp_board[2][j] != 0:
+      if temp_board[3][j] == 0:
+        temp_board[3][j] = temp_board[2][j]
+        temp_board[2][j] = 0
+      
+    if temp_board[1][j] != 0:
+      if temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = 0
         if temp_board[3][j] == 0:
           temp_board[3][j] = temp_board[2][j]
           temp_board[2][j] = 0
       
-        if temp_board[1][j] != 0:
-          if temp_board[2][j] == 0:
-            temp_board[2][j] = temp_board[1][j]
-            temp_board[1][j] = 0
-            if temp_board[3][j] == 0:
-              temp_board[3][j] = temp_board[2][j]
-              temp_board[2][j] = 0
+    if temp_board[0][j] != 0 and temp_board[1][j] == 0:
+      temp_board[1][j] = temp_board[0][j]
+      temp_board[0][j] = 0
+      if temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+        if temp_board[3][j] == 0:
+          temp_board[3][j] = temp_board[2][j]
+          temp_board[2][j] = 0
       
-      if temp_board[0][j] != 0 and temp_board[1][j] == 0:
-        temp_board[1][j] = temp_board[0][j]
-        temp_board[0][j] = 0
-        if temp_board[2][j] == 0:
-          temp_board[2][j] = temp_board[1][j]
-          temp_board[1][j] = 0
-          if temp_board[3][j] == 0:
-            temp_board[3][j] = temp_board[2][j]
-            temp_board[2][j] = 0
-      
-      if temp_board[3][j] != 0 and temp_board[3][j] == temp_board[2][j]:
-        if temp_board[0][j] == temp_board[1][j]:
-          temp_board[3][j] = temp_board[2][j]*2
-          temp_board[2][j] = temp_board[1][j]*2
-          temp_board[1][j] = 0
-          temp_board[0][j] = 0
-        else:
-          temp_board[3][j] = temp_board[2][j]*2
-          temp_board[2][j] = temp_board[1][j]
-          temp_board[1][j] = temp_board[0][j]
-          temp_board[0][j] = 0
-          
-      if temp_board[2][j] != 0 and temp_board[2][j] == temp_board[1][j]:
+    if temp_board[3][j] != 0 and temp_board[3][j] == temp_board[2][j]:
+      if temp_board[0][j] == temp_board[1][j]:
+        temp_board[3][j] = temp_board[2][j]*2
         temp_board[2][j] = temp_board[1][j]*2
+        temp_board[1][j] = 0
+        temp_board[0][j] = 0
+        tree_moves[1] = temp_board[3][j] + temp_board[2][j] + tree_moves[1]
+      else:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[1][j]
         temp_board[1][j] = temp_board[0][j]
         temp_board[0][j] = 0
+        tree_moves[1] = temp_board[3][j] + tree_moves[1]
+          
+    if temp_board[2][j] != 0 and temp_board[2][j] == temp_board[1][j]:
+      temp_board[2][j] = temp_board[1][j]*2
+      temp_board[1][j] = temp_board[0][j]
+      temp_board[0][j] = 0
+      tree_moves[1] = temp_board[2][j] + tree_moves[1]
       
-      if temp_board[1][j] != 0 and temp_board[1][j] == temp_board[0][j]:
-        temp_board[1][j] = temp_board[0][j]*2
-        temp_board[0][j] = 0 
-  def shiftleft():
-    for i in range(0, 4):
+    if temp_board[1][j] != 0 and temp_board[1][j] == temp_board[0][j]:
+      temp_board[1][j] = temp_board[0][j]*2
+      temp_board[0][j] = 0
+      tree_moves[1] = temp_board[1][j] + tree_moves[1]
+ 
+  combine()
+  #shiftleft tree 1
+  for i in range(0, 4):
+    if temp_board[i][1] != 0 and temp_board[i][0] == 0:
+      temp_board[i][0] = temp_board[i][1]
+      temp_board[i][1] = 0
+      
+    if temp_board[i][2] != 0 and temp_board[i][1] == 0:
+      temp_board[i][1] = temp_board[i][2]
+      temp_board[i][2] = 0
+      if temp_board[i][0] == 0:
+        temp_board[i][0] = temp_board[i][1]
+        temp_board[i][1] = 0
+      
+    if temp_board[i][3] != 0 and temp_board[i][2] == 0:
+      temp_board[i][2] = temp_board[i][3]
+      temp_board[i][3] = 0
+      if temp_board[i][1] == 0:
+        temp_board[i][1] = temp_board[i][2]
+        temp_board[i][2] = 0
+        if temp_board[i][0] == 0:
+          temp_board[i][0] = temp_board[i][1]
+          temp_board[i][1] = 0
+      
+    if temp_board[i][0] != 0 and temp_board[i][0] == temp_board[i][1]:
+      if temp_board[i][2] == temp_board[i][3]:  
+        temp_board[i][0] = temp_board[i][1]*2
+        temp_board[i][1] = temp_board[i][2]*2
+        temp_board[i][2] = 0
+        temp_board[i][3] = 0
+        tree_moves[2] = temp_board[i][0] + temp_board[i][1] + tree_moves[2]
+      else:
+        temp_board[i][0] = temp_board[i][1]*2
+        temp_board[i][1] = temp_board[i][2] 
+        temp_board[i][2] = temp_board[i][3]
+        temp_board[i][3] = 0
+        tree_moves[2] = temp_board[i][0] + tree_moves[2]
+      
+    if temp_board[i][2] != 0 and temp_board[i][2] == temp_board[i][1]:
+      temp_board[i][1] = temp_board[i][2]*2
+      temp_board[i][2] = temp_board[i][3]
+      temp_board[i][3] = 0
+      tree_moves[2] = temp_board[i][1] + tree_moves[2]
+      
+    if temp_board[i][3] != 0 and temp_board[i][2] == temp_board[i][3]:
+      temp_board[i][2] = temp_board[i][3]*2
+      temp_board[i][3] = 0
+      tree_moves[2] = temp_board[i][2] + tree_moves[2]
+
+  combine()
+  #shiftright tree 1
+  for i in range(0, 4):
+    if temp_board[i][2] != 0 and temp_board[i][3] == 0:
+      temp_board[i][3] = temp_board[i][2]
+      temp_board[i][2] = 0
+      
+    if temp_board[i][1] != 0 and temp_board[i][2] == 0:
+      temp_board[i][2] = temp_board[i][1]
+      temp_board[i][1] = 0
+      if temp_board[i][3] == 0:
+        temp_board[i][3] = temp_board[i][2]
+        temp_board[i][2] = 0
+      
+    if temp_board[i][0] != 0 and temp_board[i][1] == 0:
+      temp_board[i][1] = temp_board[i][0]
+      temp_board[i][0] = 0
+      if temp_board[i][2] == 0:
+        temp_board[i][2] = temp_board[i][1]
+        temp_board[i][1] = 0
+        if temp_board[i][3] == 0:
+          temp_board[i][3] = temp_board[i][2]
+          temp_board[i][2] = 0
+      
+    if temp_board[i][3] != 0 and temp_board[i][3] == temp_board[i][2]:
+      if temp_board[i][0] == temp_board[i][1]:
+        temp_board[i][3] = temp_board[i][2]*2
+        temp_board[i][2] = temp_board[i][1]*2
+        temp_board[i][1] = 0
+        temp_board[i][0] = 0
+        tree_moves[3] = temp_board[i][3] + temp_board[i][2] + tree_moves[3]
+      else:
+        temp_board[i][3] = temp_board[i][2]*2
+        temp_board[i][2] = temp_board[i][1]
+        temp_board[i][1] = temp_board[i][0]
+        temp_board[i][0] = 0
+        tree_moves[3] = temp_board[i][3] + tree_moves[3]
+      
+    if temp_board[i][2] != 0 and temp_board[i][2] == temp_board[i][1]:
+      temp_board[i][2] = temp_board[i][1]*2
+      temp_board[i][1] = temp_board[i][0]
+      temp_board[i][0] = 0
+      tree_moves[3] = temp_board[i][2] + tree_moves[3]
+          
+    if temp_board[i][1] != 0 and temp_board[i][1] == temp_board[i][0]:
+      temp_board[i][1] = temp_board[i][0]*2
+      temp_board[i][0] = 0
+      tree_moves[3] = temp_board[i][1] + tree_moves[3] 
+  combine()
+
+  moves[0] = moves[0] + max(tree_moves)
+  tree_moves = [0,1,0,1]
+  
+  #shiftdown
+  for j in range(0, 4):
+    if temp_board[2][j] != 0:
+      if temp_board[3][j] == 0:
+        temp_board[3][j] = temp_board[2][j]
+        temp_board[2][j] = 0
+      
+    if temp_board[1][j] != 0:
+      if temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+        if temp_board[3][j] == 0:
+          temp_board[3][j] = temp_board[2][j]
+          temp_board[2][j] = 0
+      
+    if temp_board[0][j] != 0 and temp_board[1][j] == 0:
+      temp_board[1][j] = temp_board[0][j]
+      temp_board[0][j] = 0
+      if temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+        if temp_board[3][j] == 0:
+          temp_board[3][j] = temp_board[2][j]
+          temp_board[2][j] = 0
+      
+    if temp_board[3][j] != 0 and temp_board[3][j] == temp_board[2][j]:
+      if temp_board[0][j] == temp_board[1][j]:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[1][j]*2
+        temp_board[1][j] = 0
+        temp_board[0][j] = 0
+        moves[1] = temp_board[3][j] + temp_board[2][j] + moves[1]
+      else:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = temp_board[0][j]
+        temp_board[0][j] = 0
+        moves[1]= temp_board[3][j] + moves[1]
+          
+    if temp_board[2][j] != 0 and temp_board[2][j] == temp_board[1][j]:
+      temp_board[2][j] = temp_board[1][j]*2
+      temp_board[1][j] = temp_board[0][j]
+      temp_board[0][j] = 0
+      moves[1] = temp_board[2][j] + moves[1]
+      
+    if temp_board[1][j] != 0 and temp_board[1][j] == temp_board[0][j]:
+      temp_board[1][j] = temp_board[0][j]*2
+      temp_board[0][j] = 0
+      moves[1] = temp_board[1][j] + moves[1]
+
+  combine()
+  #shiftup trees 2
+  for j in range(0,4):
+    if temp_board != 0:
+      if temp_board[0][j] == 0:
+        temp_board[0][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+       
+      if temp_board[2][j] != 0 and temp_board[1][j] == 0:
+        temp_board[1][j] = temp_board[2][j]
+        temp_board[2][j] = 0
+      if temp_board[0][j] == 0:
+        temp_board[0][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+      
+      if temp_board[3][j] != 0 and temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[3][j]
+        temp_board[3][j] = 0
+        if temp_board[1][j] == 0:
+          temp_board[1][j] = temp_board[2][j]
+          temp_board[2][j] = 0
+          if temp_board[0][j] == 0:
+            temp_board[0][j] = temp_board[1][j]
+            temp_board[1][j] = 0
+              
+      if temp_board[0][j] != 0 and temp_board[0][j] == temp_board[1][j]:
+        if temp_board[2][j] == temp_board[3][j]:
+          temp_board[0][j] = temp_board[1][j]*2
+          temp_board[1][j] = temp_board[2][j]*2
+          temp_board[2][j] = 0
+          temp_board[3][j] = 0
+          tree_moves[0] = temp_board[0][j] + temp_board[1][j] + tree_moves[0]
+        else:
+          temp_board[0][j] = temp_board[1][j]*2
+          temp_board[1][j] = temp_board[2][j]
+          temp_board[2][j] = temp_board[3][j]
+          temp_board[3][j] = 0
+          tree_moves[0] = temp_board[0][j] + tree_moves[0]
+       
+      if temp_board[2][j] != 0 and temp_board[2][j] == temp_board[1][j]:
+        temp_board[1][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[3][j]
+        temp_board[3][j] = 0
+        tree_moves[0] = temp_board[1][j] + tree_moves[0]
+        
+      if temp_board[3][j] != 0 and temp_board[2][j] == temp_board[3][j]:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[3][j] = 0
+        tree_moves[0] = temp_board[3][j] + temp_board[2][j] + tree_moves[0]
+
+  combine()
+  #shiftdown trees 2
+  for j in range(0, 4):
+    if temp_board[2][j] != 0:
+      if temp_board[3][j] == 0:
+        temp_board[3][j] = temp_board[2][j]
+        temp_board[2][j] = 0
+      
+    if temp_board[1][j] != 0:
+      if temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+        if temp_board[3][j] == 0:
+          temp_board[3][j] = temp_board[2][j]
+          temp_board[2][j] = 0
+      
+    if temp_board[0][j] != 0 and temp_board[1][j] == 0:
+      temp_board[1][j] = temp_board[0][j]
+      temp_board[0][j] = 0
+      if temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+        if temp_board[3][j] == 0:
+          temp_board[3][j] = temp_board[2][j]
+          temp_board[2][j] = 0
+      
+    if temp_board[3][j] != 0 and temp_board[3][j] == temp_board[2][j]:
+      if temp_board[0][j] == temp_board[1][j]:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[1][j]*2
+        temp_board[1][j] = 0
+        temp_board[0][j] = 0
+        tree_moves[1] = temp_board[3][j] + temp_board[2][j] + tree_moves[1]
+      else:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = temp_board[0][j]
+        temp_board[0][j] = 0
+        tree_moves[1] = temp_board[3][j] + tree_moves[1]
+          
+    if temp_board[2][j] != 0 and temp_board[2][j] == temp_board[1][j]:
+      temp_board[2][j] = temp_board[1][j]*2
+      temp_board[1][j] = temp_board[0][j]
+      temp_board[0][j] = 0
+      tree_moves[1] = temp_board[2][j] + tree_moves[1]
+      
+    if temp_board[1][j] != 0 and temp_board[1][j] == temp_board[0][j]:
+      temp_board[1][j] = temp_board[0][j]*2
+      temp_board[0][j] = 0
+      tree_moves[1] = temp_board[1][j] + tree_moves[1]
+
+  combine()
+  #shiftleft trees 2
+  for i in range(0, 4):
+    if temp_board[i][1] != 0 and temp_board[i][0] == 0:
+      temp_board[i][0] = temp_board[i][1]
+      temp_board[i][1] = 0
+      
+    if temp_board[i][2] != 0 and temp_board[i][1] == 0:
+      temp_board[i][1] = temp_board[i][2]
+      temp_board[i][2] = 0
+      if temp_board[i][0] == 0:
+        temp_board[i][0] = temp_board[i][1]
+        temp_board[i][1] = 0
+      
+    if temp_board[i][3] != 0 and temp_board[i][2] == 0:
+      temp_board[i][2] = temp_board[i][3]
+      temp_board[i][3] = 0
+      if temp_board[i][1] == 0:
+        temp_board[i][1] = temp_board[i][2]
+        temp_board[i][2] = 0
+        if temp_board[i][0] == 0:
+          temp_board[i][0] = temp_board[i][1]
+          temp_board[i][1] = 0
+      
+    if temp_board[i][0] != 0 and temp_board[i][0] == temp_board[i][1]:
+      if temp_board[i][2] == temp_board[i][3]:  
+        temp_board[i][0] = temp_board[i][1]*2
+        temp_board[i][1] = temp_board[i][2]*2
+        temp_board[i][2] = 0
+        temp_board[i][3] = 0
+        moves[2] = temp_board[i][0] + temp_board[i][1] + moves[2]
+      else:
+        temp_board[i][0] = temp_board[i][1]*2
+        temp_board[i][1] = temp_board[i][2] 
+        temp_board[i][2] = temp_board[i][3]
+        temp_board[i][3] = 0
+        moves[2] = temp_board[i][0] + moves[2]
+      
+    if temp_board[i][2] != 0 and temp_board[i][2] == temp_board[i][1]:
+      temp_board[i][1] = temp_board[i][2]*2
+      temp_board[i][2] = temp_board[i][3]
+      temp_board[i][3] = 0
+      tree_moves[2] = temp_board[i][1] + tree_moves[2]
+      
+    if temp_board[i][3] != 0 and temp_board[i][2] == temp_board[i][3]:
+      temp_board[i][2] = temp_board[i][3]*2
+      temp_board[i][3] = 0
+      tree_moves[2] = temp_board[i][2] + tree_moves[2]
+  combine()  
+  #shiftright trees2
+  for i in range(0, 4):
+    if temp_board[i][2] != 0 and temp_board[i][3] == 0:
+      temp_board[i][3] = temp_board[i][2]
+      temp_board[i][2] = 0
+      
+    if temp_board[i][1] != 0 and temp_board[i][2] == 0:
+      temp_board[i][2] = temp_board[i][1]
+      temp_board[i][1] = 0
+      if temp_board[i][3] == 0:
+        temp_board[i][3] = temp_board[i][2]
+        temp_board[i][2] = 0
+      
+    if temp_board[i][0] != 0 and temp_board[i][1] == 0:
+      temp_board[i][1] = temp_board[i][0]
+      temp_board[i][0] = 0
+      if temp_board[i][2] == 0:
+        temp_board[i][2] = temp_board[i][1]
+        temp_board[i][1] = 0
+        if temp_board[i][3] == 0:
+          temp_board[i][3] = temp_board[i][2]
+          temp_board[i][2] = 0
+      
+    if temp_board[i][3] != 0 and temp_board[i][3] == temp_board[i][2]:
+      if temp_board[i][0] == temp_board[i][1]:
+        temp_board[i][3] = temp_board[i][2]*2
+        temp_board[i][2] = temp_board[i][1]*2
+        temp_board[i][1] = 0
+        temp_board[i][0] = 0
+        tree_moves[3] = temp_board[i][3] + temp_board[i][2] + tree_moves[3]
+      else:
+        temp_board[i][3] = temp_board[i][2]*2
+        temp_board[i][2] = temp_board[i][1]
+        temp_board[i][1] = temp_board[i][0]
+        temp_board[i][0] = 0
+        tree_moves[3] = temp_board[i][3] + tree_moves[3]
+      
+    if temp_board[i][2] != 0 and temp_board[i][2] == temp_board[i][1]:
+      temp_board[i][2] = temp_board[i][1]*2
+      temp_board[i][1] = temp_board[i][0]
+      temp_board[i][0] = 0
+      tree_moves[3] = temp_board[i][2] + tree_moves[3]
+          
+    if temp_board[i][1] != 0 and temp_board[i][1] == temp_board[i][0]:
+      temp_board[i][1] = temp_board[i][0]*2
+      temp_board[i][0] = 0
+      tree_moves[3] = temp_board[i][1] + tree_moves[3] 
+  combine()
+  moves[1] = moves[1] + max(tree_moves)
+  tree_moves = [0,1,0,0]
+  #shiftleft
+  for i in range(0, 4):
       if temp_board[i][1] != 0 and temp_board[i][0] == 0:
         temp_board[i][0] = temp_board[i][1]
         temp_board[i][1] = 0
@@ -160,872 +583,485 @@ def brute_move():
           temp_board[i][1] = temp_board[i][2]*2
           temp_board[i][2] = 0
           temp_board[i][3] = 0
+          moves[2] = temp_board[i][0] + temp_board[i][1] + moves[2]
         else:
           temp_board[i][0] = temp_board[i][1]*2
           temp_board[i][1] = temp_board[i][2] 
           temp_board[i][2] = temp_board[i][3]
           temp_board[i][3] = 0
+          moves[2] = temp_board[i][0] + moves[2]
         
       if temp_board[i][2] != 0 and temp_board[i][2] == temp_board[i][1]:
         temp_board[i][1] = temp_board[i][2]*2
         temp_board[i][2] = temp_board[i][3]
         temp_board[i][3] = 0
+        moves[2] = temp_board[i][1] + moves[2]
         
       if temp_board[i][3] != 0 and temp_board[i][2] == temp_board[i][3]:
         temp_board[i][2] = temp_board[i][3]*2
-        temp_board[i][3] = 0 
-  def shiftright():
-    for i in range(0, 4):
-      if temp_board[i][2] != 0 and temp_board[i][3] == 0:
+        temp_board[i][3] = 0
+        moves[2] = temp_board[i][2] + moves[2]
+  
+  combine()
+  #shiftup tree 3
+  for j in range(0,4):
+    if temp_board != 0:
+      if temp_board[0][j] == 0:
+        temp_board[0][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+       
+      if temp_board[2][j] != 0 and temp_board[1][j] == 0:
+        temp_board[1][j] = temp_board[2][j]
+        temp_board[2][j] = 0
+      if temp_board[0][j] == 0:
+        temp_board[0][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+      
+      if temp_board[3][j] != 0 and temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[3][j]
+        temp_board[3][j] = 0
+        if temp_board[1][j] == 0:
+          temp_board[1][j] = temp_board[2][j]
+          temp_board[2][j] = 0
+          if temp_board[0][j] == 0:
+            temp_board[0][j] = temp_board[1][j]
+            temp_board[1][j] = 0
+              
+      if temp_board[0][j] != 0 and temp_board[0][j] == temp_board[1][j]:
+        if temp_board[2][j] == temp_board[3][j]:
+          temp_board[0][j] = temp_board[1][j]*2
+          temp_board[1][j] = temp_board[2][j]*2
+          temp_board[2][j] = 0
+          temp_board[3][j] = 0
+          tree_moves[0] = temp_board[0][j] + temp_board[1][j] + tree_moves[0]
+        else:
+          temp_board[0][j] = temp_board[1][j]*2
+          temp_board[1][j] = temp_board[2][j]
+          temp_board[2][j] = temp_board[3][j]
+          temp_board[3][j] = 0
+          tree_moves[0] = temp_board[0][j] + tree_moves[0]
+       
+      if temp_board[2][j] != 0 and temp_board[2][j] == temp_board[1][j]:
+        temp_board[1][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[3][j]
+        temp_board[3][j] = 0
+        tree_moves[0] = temp_board[1][j] + tree_moves[0]
+        
+      if temp_board[3][j] != 0 and temp_board[2][j] == temp_board[3][j]:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[3][j] = 0
+        tree_moves[0] = temp_board[3][j] + temp_board[2][j] + tree_moves[0]
+  
+  combine()
+  #shiftdown tree 3
+  for j in range(0, 4):
+    if temp_board[2][j] != 0:
+      if temp_board[3][j] == 0:
+        temp_board[3][j] = temp_board[2][j]
+        temp_board[2][j] = 0
+      
+    if temp_board[1][j] != 0:
+      if temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+        if temp_board[3][j] == 0:
+          temp_board[3][j] = temp_board[2][j]
+          temp_board[2][j] = 0
+      
+    if temp_board[0][j] != 0 and temp_board[1][j] == 0:
+      temp_board[1][j] = temp_board[0][j]
+      temp_board[0][j] = 0
+      if temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+        if temp_board[3][j] == 0:
+          temp_board[3][j] = temp_board[2][j]
+          temp_board[2][j] = 0
+      
+    if temp_board[3][j] != 0 and temp_board[3][j] == temp_board[2][j]:
+      if temp_board[0][j] == temp_board[1][j]:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[1][j]*2
+        temp_board[1][j] = 0
+        temp_board[0][j] = 0
+        tree_moves[1] = temp_board[3][j] + temp_board[2][j] + tree_moves[1]
+      else:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = temp_board[0][j]
+        temp_board[0][j] = 0
+        tree_moves[1] = temp_board[3][j] + tree_moves[1]
+          
+    if temp_board[2][j] != 0 and temp_board[2][j] == temp_board[1][j]:
+      temp_board[2][j] = temp_board[1][j]*2
+      temp_board[1][j] = temp_board[0][j]
+      temp_board[0][j] = 0
+      tree_moves[1] = temp_board[2][j] + tree_moves[1]
+      
+    if temp_board[1][j] != 0 and temp_board[1][j] == temp_board[0][j]:
+      temp_board[1][j] = temp_board[0][j]*2
+      temp_board[0][j] = 0
+      tree_moves[1] = temp_board[1][j] + tree_moves[1] 
+  combine()
+  #shiftleft trees 3
+  for i in range(0, 4):
+    if temp_board[i][1] != 0 and temp_board[i][0] == 0:
+      temp_board[i][0] = temp_board[i][1]
+      temp_board[i][1] = 0
+      
+    if temp_board[i][2] != 0 and temp_board[i][1] == 0:
+      temp_board[i][1] = temp_board[i][2]
+      temp_board[i][2] = 0
+      if temp_board[i][0] == 0:
+        temp_board[i][0] = temp_board[i][1]
+        temp_board[i][1] = 0
+      
+    if temp_board[i][3] != 0 and temp_board[i][2] == 0:
+      temp_board[i][2] = temp_board[i][3]
+      temp_board[i][3] = 0
+      if temp_board[i][1] == 0:
+        temp_board[i][1] = temp_board[i][2]
+        temp_board[i][2] = 0
+        if temp_board[i][0] == 0:
+          temp_board[i][0] = temp_board[i][1]
+          temp_board[i][1] = 0
+      
+    if temp_board[i][0] != 0 and temp_board[i][0] == temp_board[i][1]:
+      if temp_board[i][2] == temp_board[i][3]:  
+        temp_board[i][0] = temp_board[i][1]*2
+        temp_board[i][1] = temp_board[i][2]*2
+        temp_board[i][2] = 0
+        temp_board[i][3] = 0
+        moves[2] = temp_board[i][0] + temp_board[i][1] + moves[2]
+      else:
+        temp_board[i][0] = temp_board[i][1]*2
+        temp_board[i][1] = temp_board[i][2] 
+        temp_board[i][2] = temp_board[i][3]
+        temp_board[i][3] = 0
+        moves[2] = temp_board[i][0] + moves[2]
+      
+    if temp_board[i][2] != 0 and temp_board[i][2] == temp_board[i][1]:
+      temp_board[i][1] = temp_board[i][2]*2
+      temp_board[i][2] = temp_board[i][3]
+      temp_board[i][3] = 0
+      tree_moves[2] = temp_board[i][1] + tree_moves[2]
+      
+    if temp_board[i][3] != 0 and temp_board[i][2] == temp_board[i][3]:
+      temp_board[i][2] = temp_board[i][3]*2
+      temp_board[i][3] = 0
+      tree_moves[2] = temp_board[i][2] + tree_moves[2] 
+  combine()
+  #shiftright trees 3
+  for i in range(0, 4):
+    if temp_board[i][2] != 0 and temp_board[i][3] == 0:
+      temp_board[i][3] = temp_board[i][2]
+      temp_board[i][2] = 0
+      
+    if temp_board[i][1] != 0 and temp_board[i][2] == 0:
+      temp_board[i][2] = temp_board[i][1]
+      temp_board[i][1] = 0
+      if temp_board[i][3] == 0:
         temp_board[i][3] = temp_board[i][2]
         temp_board[i][2] = 0
       
-      if temp_board[i][1] != 0 and temp_board[i][2] == 0:
+    if temp_board[i][0] != 0 and temp_board[i][1] == 0:
+      temp_board[i][1] = temp_board[i][0]
+      temp_board[i][0] = 0
+      if temp_board[i][2] == 0:
         temp_board[i][2] = temp_board[i][1]
         temp_board[i][1] = 0
         if temp_board[i][3] == 0:
           temp_board[i][3] = temp_board[i][2]
           temp_board[i][2] = 0
       
-      if temp_board[i][0] != 0 and temp_board[i][1] == 0:
-        temp_board[i][1] = temp_board[i][0]
-        temp_board[i][0] = 0
-        if temp_board[i][2] == 0:
-          temp_board[i][2] = temp_board[i][1]
-          temp_board[i][1] = 0
-          if temp_board[i][3] == 0:
-            temp_board[i][3] = temp_board[i][2]
-            temp_board[i][2] = 0
-      
-      if temp_board[i][3] != 0 and temp_board[i][3] == temp_board[i][2]:
-        if temp_board[i][0] == temp_board[i][1]:
-          temp_board[i][3] = temp_board[i][1]*2
-          temp_board[i][2] = temp_board[i][1]*2
-          temp_board[i][1] = 0
-          temp_board[i][0] = 0
-        else:
-          temp_board[i][3] = temp_board[i][2]*2
-          temp_board[i][2] = temp_board[i][1]
-          temp_board[i][1] = temp_board[i][0]
-          temp_board[i][0] = 0
-        
-      if temp_board[i][2] != 0 and temp_board[i][2] == temp_board[i][1]:
+    if temp_board[i][3] != 0 and temp_board[i][3] == temp_board[i][2]:
+      if temp_board[i][0] == temp_board[i][1]:
+        temp_board[i][3] = temp_board[i][2]*2
         temp_board[i][2] = temp_board[i][1]*2
+        temp_board[i][1] = 0
+        temp_board[i][0] = 0
+        tree_moves[3] = temp_board[i][3] + temp_board[i][2] + tree_moves[3]
+      else:
+        temp_board[i][3] = temp_board[i][2]*2
+        temp_board[i][2] = temp_board[i][1]
         temp_board[i][1] = temp_board[i][0]
         temp_board[i][0] = 0
-            
-      if temp_board[i][1] != 0 and temp_board[i][1] == temp_board[i][0]:
-        temp_board[i][1] = temp_board[i][0]*2
-        temp_board[i][0] = 0 
-
-  u_moves = 0
-  d_moves = 0
-  l_moves = 0
-  r_moves = 0
-
-  u_tree_moves1 = 0
-  u_tree_moves2 = 0
-  u_tree_moves3 = 0
-  u_tree_moves4 = 0
-
-  d_tree_moves1 = 0
-  d_tree_moves2 = 0
-  d_tree_moves3 = 0
-  d_tree_moves4 = 0
-
-  l_tree_moves1 = 0
-  l_tree_moves2 = 0
-  l_tree_moves3 = 0
-  l_tree_moves4 = 0
-
-  r_tree_moves1 = 0
-  r_tree_moves2 = 0
-  r_tree_moves3 = 0
-  r_tree_moves4 = 0
-
-  u_tree_moves = []
-  d_tree_moves = []
-  l_tree_moves = []
-  r_tree_moves = []
-
-  for k in range(0, 5): 
-    combine()
-    
-    if k == 1:
-      shiftup()
-    if k == 2:
-      shiftdown()
-    if k == 3:
-      shiftleft()
-    if k == 4:
-      shiftright()
-   
-    temp_board2 = [[0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0]]
-    temp_board2 = temp_board
-
-    #shift up with points
-    for j in range(0, 4):
-      if temp_board2[1][j]  != 0 and temp_board2[0][j] == 0:
-        temp_board2[0][j] = temp_board2[1][j]
-        temp_board2[1][j] = 0
-         
-      if temp_board2[2][j] != 0 and temp_board2[1][j] == 0:
-        temp_board2[1][j] = temp_board2[2][j]
-        temp_board2[2][j] = 0
-        if temp_board2[0][j] == 0:
-          temp_board2[0][j] = temp_board2[1][j]
-          temp_board2[1][j] = 0
+        tree_moves[3] = temp_board[i][3] + tree_moves[3]
       
-      if temp_board2[3][j] != 0 and temp_board2[2][j] == 0:
-        temp_board2[2][j] = temp_board2[3][j]
-        temp_board2[3][j] = 0
-        if temp_board2[1][j] == 0:
-          temp_board2[1][j] = temp_board2[2][j]
-          temp_board2[2][j] = 0
-          if temp_board2[0][j] == 0:
-            temp_board2[0][j] = temp_board2[1][j]
-            temp_board2[1][j] = 0
-                 
-      if temp_board2[0][j] != 0 and temp_board2[0][j] == temp_board2[1][j]:
-        if temp_board2[2][j] == temp_board2[3][j]:
-          if k == 0:
-            temp_board2[0][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = 0
-            temp_board2[3][j] = 0
-            u_moves += temp_board2[1][j] + temp_board2[0][j] 
-          if k == 1:
-            temp_board2[0][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = 0
-            temp_board2[3][j] = 0
-            u_tree_moves1 += temp_board2[1][j] + temp_board2[0][j] 
-          if k == 2:
-            temp_board2[0][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = 0
-            temp_board2[3][j] = 0
-            u_tree_moves2 += temp_board2[1][j] + temp_board2[0][j] 
-          if k == 3:
-            temp_board2[0][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = 0
-            temp_board2[3][j] = 0
-            u_tree_moves3 += temp_board2[1][j] + temp_board2[0][j] 
+    if temp_board[i][2] != 0 and temp_board[i][2] == temp_board[i][1]:
+      temp_board[i][2] = temp_board[i][1]*2
+      temp_board[i][1] = temp_board[i][0]
+      temp_board[i][0] = 0
+      tree_moves[3] = temp_board[i][2] + tree_moves[3]
+          
+    if temp_board[i][1] != 0 and temp_board[i][1] == temp_board[i][0]:
+      temp_board[i][1] = temp_board[i][0]*2
+      temp_board[i][0] = 0
+      tree_moves[3] = temp_board[i][1] + tree_moves[3] 
 
-          if k == 4:
-            temp_board2[0][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = 0
-            temp_board2[3][j] = 0 
-            u_tree_moves4 += temp_board2[1][j] + temp_board2[0][j] 
-        else:
-          if k == 0:
-            temp_board2[0][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = temp_board2[2][j]
-            temp_board2[2][j] = temp_board2[3][j]
-            temp_board2[3][j] = 0
-            u_moves += temp_board2[0][j] 
-          if k == 1:
-            temp_board2[0][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = temp_board2[2][j]
-            temp_board2[2][j] = temp_board2[3][j]
-            temp_board2[3][j] = 0
-            u_tree_moves1 += temp_board2[0][j] 
-          if k == 2:
-            temp_board2[0][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = temp_board2[2][j]
-            temp_board2[2][j] = temp_board2[3][j]
-            temp_board2[3][j] = 0
-            u_tree_moves2 += temp_board2[0][j] 
-          if k == 3:
-            temp_board2[0][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = temp_board2[2][j]
-            temp_board2[2][j] = temp_board2[3][j]
-            temp_board2[3][j] = 0
-            u_tree_moves3 += temp_board2[0][j] 
-          if k == 4:
-            temp_board2[0][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = temp_board2[2][j]
-            temp_board2[2][j] = temp_board2[3][j]
-            temp_board2[3][j] = 0
-            u_tree_moves4 += temp_board2[0][j] 
-
-      if temp_board2[2][j] != 0 and temp_board2[2][j] == temp_board2[1][j]:
-        if k == 0:
-          temp_board2[1][j] = temp_board2[2][j]*2
-          temp_board2[2][j] = temp_board2[3][j]
-          temp_board2[3][j] = 0
-          u_moves += temp_board2[1][j] 
-        if k == 1:
-          temp_board2[1][j] = temp_board2[2][j]*2
-          temp_board2[2][j] = temp_board2[3][j]
-          temp_board2[3][j] = 0
-          u_tree_moves1 += temp_board2[1][j]  
-        if k == 2:
-          temp_board2[1][j] = temp_board2[2][j]*2
-          temp_board2[2][j] = temp_board2[3][j]
-          temp_board2[3][j] = 0
-          u_tree_moves2 += temp_board2[1][j] 
-        if k == 3:
-          temp_board2[1][j] = temp_board2[2][j]*2
-          temp_board2[2][j] = temp_board2[3][j]
-          temp_board2[3][j] = 0
-          u_tree_moves3 += temp_board2[1][j] 
-        if k == 4:
-          temp_board2[1][j] = temp_board2[2][j]*2
-          temp_board2[2][j] = temp_board2[3][j]
-          temp_board2[3][j] = 0
-          u_tree_moves4 += temp_board2[1][j] 
-
-      if temp_board2[3][j] != 0 and temp_board2[2][j] == temp_board2[3][j]:
-        if k == 0:
-          temp_board2[3][j] = temp_board2[2][j]*2
-          temp_board2[3][j] = 0
-          u_moves += temp_board2[3][j] 
-        if k == 1:
-          temp_board2[3][j] = temp_board2[2][j]*2
-          temp_board2[3][j] = 0
-          u_tree_moves1 += temp_board2[3][j]
-        if k == 2:
-          temp_board2[3][j] = temp_board2[2][j]*2
-          temp_board2[3][j] = 0
-          u_tree_moves2 += temp_board2[3][j]
-        if k == 3:
-          temp_board2[3][j] = temp_board2[2][j]*2
-          temp_board2[3][j] = 0
-          u_tree_moves3 += temp_board2[3][j] 
-        if k == 4:
-          temp_board2[3][j] = temp_board2[2][j]*2
-          temp_board2[3][j] = 0
-          u_tree_moves4 += temp_board2[3][j]
-
-    if gboard == temp_board2:
-      if k == 0:
-        u_moves += -100000
-      if k == 1:
-        u_tree_moves1 += -100000
-      if k == 2:
-        u_tree_moves2 += -100000
-      if k == 3:
-        u_tree_moves3 += -100000
-      if k == 4:
-        u_tree_moves4 += -100000
-
-    if max(max(temp_board2)) == temp_board2[3][3]:
-      if k == 0:
-        u_moves += 100
-      if k == 1:
-        u_tree_moves1 += 100
-      if k == 2:
-        u_tree_moves2 += 100
-      if k == 3:
-        u_tree_moves3 += 100
-      if k == 4:
-        u_tree_moves4 += 100 
-
-    if k == 4:
-      u_tree_moves.append(u_tree_moves1)
-      u_tree_moves.append(u_tree_moves2)
-      u_tree_moves.append(u_tree_moves3)
-      u_tree_moves.append(u_tree_moves4)
-      u_moves += max(u_tree_moves)     
-
-    combine()
-    
-    if k == 1:
-      shiftup()
-    if k == 2:
-      shiftdown()
-    if k == 3:
-      shiftleft()
-    if k == 4:
-      shiftright()
-
-    temp_board2 = [[0 for x in range(w)] for y in range(h)] 
-    temp_board2 = temp_board   
-    #shift down with points
-    for j in range(0, 4):
-      if temp_board2[2][j] != 0 and temp_board2[3][j] == 0:
-        temp_board2[3][j] = temp_board2[2][j]
-        temp_board2[2][j] = 0
+  moves[2] = moves[2] + max(tree_moves)
+  tree_moves = [0,1,0,1]
+  combine()
+  #shift right
+  for i in range(0, 4):
+    if temp_board[i][2] != 0 and temp_board[i][3] == 0:
+      temp_board[i][3] = temp_board[i][2]
+      temp_board[i][2] = 0
       
-      if temp_board2[1][j] != 0:
-        if temp_board2[2][j] == 0:
-          temp_board2[2][j] = temp_board2[1][j]
-          temp_board2[1][j] = 0
-          if temp_board2[3][j] == 0:
-            temp_board2[3][j] = temp_board2[2][j]
-            temp_board2[2][j] = 0
+    if temp_board[i][1] != 0 and temp_board[i][2] == 0:
+      temp_board[i][2] = temp_board[i][1]
+      temp_board[i][1] = 0
+      if temp_board[i][3] == 0:
+        temp_board[i][3] = temp_board[i][2]
+        temp_board[i][2] = 0
+      
+    if temp_board[i][0] != 0 and temp_board[i][1] == 0:
+      temp_board[i][1] = temp_board[i][0]
+      temp_board[i][0] = 0
+      if temp_board[i][2] == 0:
+        temp_board[i][2] = temp_board[i][1]
+        temp_board[i][1] = 0
+        if temp_board[i][3] == 0:
+          temp_board[i][3] = temp_board[i][2]
+          temp_board[i][2] = 0
+      
+    if temp_board[i][3] != 0 and temp_board[i][3] == temp_board[i][2]:
+      if temp_board[i][0] == temp_board[i][1]:
+        temp_board[i][3] = temp_board[i][2]*2
+        temp_board[i][2] = temp_board[i][1]*2
+        temp_board[i][1] = 0
+        temp_board[i][0] = 0
+        moves[3] = temp_board[i][3] + temp_board[i][2] + moves[3]
+      else:
+        temp_board[i][3] = temp_board[i][2]*2
+        temp_board[i][2] = temp_board[i][1]
+        temp_board[i][1] = temp_board[i][0]
+        temp_board[i][0] = 0
+        moves[3] = temp_board[i][3] + moves[3]
+      
+    if temp_board[i][2] != 0 and temp_board[i][2] == temp_board[i][1]:
+      temp_board[i][2] = temp_board[i][1]*2
+      temp_board[i][1] = temp_board[i][0]
+      temp_board[i][0] = 0
+      moves[3] = temp_board[i][2] + moves[3]
+          
+    if temp_board[i][1] != 0 and temp_board[i][1] == temp_board[i][0]:
+      temp_board[i][1] = temp_board[i][0]*2
+      temp_board[i][0] = 0
+      moves[3] = temp_board[i][1] + moves[3]
 
-      if temp_board2[0][j] != 0 and temp_board2[1][j] == 0:
-        temp_board2[1][j] = temp_board2[0][j]
-        temp_board2[0][j] = 0
-        if temp_board2[2][j] == 0:
-          temp_board2[2][j] = temp_board2[1][j]
-          temp_board2[1][j] = 0
-          if temp_board2[3][j] == 0:
-            temp_board2[3][j] = temp_board2[2][j]
-            temp_board2[2][j] = 0
+  combine()
+  #shiftup trees 4
+  for j in range(0,4):
+    if temp_board != 0:
+      if temp_board[0][j] == 0:
+        temp_board[0][j] = temp_board[1][j]
+        temp_board[1][j] = 0
        
-      if temp_board2[3][j] != 0 and temp_board2[3][j] == temp_board2[2][j]:
-        if temp_board2[0][j] == temp_board2[1][j]:
-          if k == 0:
-            temp_board2[3][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = 0
-            temp_board2[0][j] = 0
-            d_moves += temp_board2[3][j] + temp_board2[2][j] 
-          if k == 1:
-            temp_board2[3][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = 0
-            temp_board2[0][j] = 0
-            d_tree_moves1 += temp_board2[3][j] + temp_board2[2][j] 
-          if k == 2:
-            temp_board2[3][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = 0
-            temp_board2[0][j] = 0
-            d_tree_moves2 += temp_board2[3][j] + temp_board2[2][j]  
-          if k == 3:
-            temp_board2[3][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = 0
-            temp_board2[0][j] = 0
-            d_tree_moves3 += temp_board2[3][j] + temp_board2[2][j]  
-          if k == 4:
-            temp_board2[3][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = temp_board2[1][j]*2
-            temp_board2[1][j] = 0
-            temp_board2[0][j] = 0
-            d_tree_moves4 += temp_board2[3][j] + temp_board2[2][j] 
+      if temp_board[2][j] != 0 and temp_board[1][j] == 0:
+        temp_board[1][j] = temp_board[2][j]
+        temp_board[2][j] = 0
+      if temp_board[0][j] == 0:
+        temp_board[0][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+      
+      if temp_board[3][j] != 0 and temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[3][j]
+        temp_board[3][j] = 0
+        if temp_board[1][j] == 0:
+          temp_board[1][j] = temp_board[2][j]
+          temp_board[2][j] = 0
+          if temp_board[0][j] == 0:
+            temp_board[0][j] = temp_board[1][j]
+            temp_board[1][j] = 0
+              
+      if temp_board[0][j] != 0 and temp_board[0][j] == temp_board[1][j]:
+        if temp_board[2][j] == temp_board[3][j]:
+          temp_board[0][j] = temp_board[1][j]*2
+          temp_board[1][j] = temp_board[2][j]*2
+          temp_board[2][j] = 0
+          temp_board[3][j] = 0
+          tree_moves[0] = temp_board[0][j] + temp_board[1][j] + tree_moves[0]
         else:
-          if k == 0:
-            temp_board2[3][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = temp_board2[1][j]
-            temp_board2[1][j] = temp_board2[0][j]
-            temp_board2[0][j] = 0
-            d_moves += temp_board2[3][j] 
-          if k == 1:
-            temp_board2[3][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = temp_board2[1][j]
-            temp_board2[1][j] = temp_board2[0][j]
-            temp_board2[0][j] = 0
-            d_tree_moves1 += temp_board2[3][j]  
-          if k == 2:
-            temp_board2[3][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = temp_board2[1][j]
-            temp_board2[1][j] = temp_board2[0][j]
-            temp_board2[0][j] = 0 
-            d_tree_moves2 += temp_board2[3][j] 
-          if k == 3:
-            temp_board2[3][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = temp_board2[1][j]
-            temp_board2[1][j] = temp_board2[0][j]
-            temp_board2[0][j] = 0
-            d_tree_moves3 += temp_board2[3][j] 
-          if k == 4:
-            temp_board2[3][j] = temp_board2[2][j]*2
-            temp_board2[2][j] = temp_board2[1][j]
-            temp_board2[1][j] = temp_board2[0][j]
-            temp_board2[0][j] = 0
-            d_tree_moves4 += temp_board2[3][j] 
-
-      if temp_board2[2][j] != 0 and temp_board2[2][j] == temp_board2[1][j]:
-        if k == 0:
-          temp_board2[2][j] = temp_board2[1][j]*2
-          temp_board2[1][j] = temp_board2[0][j]
-          temp_board2[0][j] = 0
-          d_moves += temp_board2[2][j]
-        if k == 1:
-          temp_board2[2][j] = temp_board2[1][j]*2
-          temp_board2[1][j] = temp_board2[0][j]
-          temp_board2[0][j] = 0
-          d_tree_moves1 += temp_board2[2][j] 
-        if k == 2:
-          temp_board2[2][j] = temp_board2[1][j]*2
-          temp_board2[1][j] = temp_board2[0][j]
-          temp_board2[0][j] = 0
-          d_tree_moves2 += temp_board2[2][j] 
-        if k == 3:
-          temp_board2[2][j] = temp_board2[1][j]*2
-          temp_board2[1][j] = temp_board2[0][j]
-          temp_board2[0][j] = 0
-          d_tree_moves3 += temp_board2[2][j]   
-        if k == 4:
-          temp_board2[2][j] = temp_board2[1][j]*2
-          temp_board2[1][j] = temp_board2[0][j]
-          temp_board2[0][j] = 0
-          d_tree_moves4 += temp_board2[2][j]
-      if temp_board2[1][j] != 0 and temp_board2[1][j] == temp_board2[0][j]:
-        if k == 0:
-          temp_board2[1][j] = temp_board2[0][j]*2
-          temp_board2[0][j] = 0
-          d_moves += temp_board2[1][j] 
-        if k == 1:
-          temp_board2[1][j] = temp_board2[0][j]*2
-          temp_board2[0][j] = 0
-          d_tree_moves1 += temp_board2[1][j] 
-        if k == 2:
-          temp_board2[1][j] = temp_board2[0][j]*2
-          temp_board2[0][j] = 0
-          d_tree_moves2 += temp_board2[1][j] 
-        if k == 3:
-          temp_board2[1][j] = temp_board2[0][j]*2
-          temp_board2[0][j] = 0
-          d_tree_moves3 += temp_board2[1][j] 
-        if k == 4:
-          temp_board2[1][j] = temp_board2[0][j]*2
-          temp_board2[0][j] = 0
-          d_tree_moves4 += temp_board2[1][j] 
-
-    if gboard == temp_board2:
-      if k == 0:
-        d_moves += -100000
-      if k == 1:
-        d_tree_moves1 += -100000
-      if k == 2:
-        d_tree_moves2 += -100000
-      if k == 3:
-        d_tree_moves3 += -100000
-      if k == 4:
-        d_tree_moves4 += -100000 
-
-    if max(max(temp_board2)) == temp_board2[3][3]:
-      if k == 0:
-        d_moves += 100
-      if k == 1:
-        d_tree_moves1 += 100
-      if k == 2:
-        d_tree_moves2 += 100
-      if k == 3:
-        d_tree_moves3 += 100
-      if k == 4:
-        d_tree_moves4 += 100 
-
-    if k == 4:
-      d_tree_moves.append(d_tree_moves1)
-      d_tree_moves.append(d_tree_moves2)
-      d_tree_moves.append(d_tree_moves3)
-      d_tree_moves.append(d_tree_moves4)
-      d_moves += max(d_tree_moves)
-
-    combine()
-
-    if k == 1:
-      shiftup()
-    if k == 2:
-      shiftdown()
-    if k == 3:
-      shiftleft()
-    if k == 4:
-      shiftright()
-    
-    temp_board2 = [[0 for x in range(w)] for y in range(h)] 
-    temp_board2 = temp_board
-    #shift left
-    for i in range(0, 4):
-      if temp_board2[i][1] != 0 and temp_board2[i][0] == 0:
-        temp_board2[i][0] = temp_board2[i][1]
-        temp_board2[i][1] = 0
-      
-      if temp_board2[i][2] != 0 and temp_board2[i][1] == 0:
-        temp_board2[i][1] = temp_board2[i][2]
-        temp_board2[i][2] = 0
-        if temp_board2[i][0] == 0:
-          temp_board2[i][0] = temp_board2[i][1]
-          temp_board2[i][1] = 0
-      
-      if temp_board2[i][3] != 0 and temp_board[i][2] == 0:
-        temp_board2[i][2] = temp_board[i][3]
-        temp_board2[i][3] = 0
-        if temp_board2[i][1] == 0:
-          temp_board2[i][1] = temp_board2[i][2]
-          temp_board2[i][2] = 0
-          if temp_board2[i][0] == 0:
-            temp_board2[i][0] = temp_board2[i][1]
-            temp_board2[i][1] = 0
- 
-      if temp_board2[i][0] != 0 and temp_board2[i][0] == temp_board2[i][1]:
-        if temp_board2[i][2] == temp_board2[i][3]:
-          if k == 0:
-            temp_board2[i][0] = temp_board2[i][1]*2
-            temp_board2[i][1] = temp_board2[i][2]*2
-            temp_board2[i][2] = 0
-            temp_board2[i][3] = 0
-            l_moves += temp_board2[i][0] + temp_board2[i][1] 
-          if k == 1:
-            temp_board2[i][0] = temp_board2[i][1]*2
-            temp_board2[i][1] = temp_board2[i][2]*2
-            temp_board2[i][2] = 0
-            temp_board2[i][3] = 0
-            l_tree_moves1 += temp_board2[i][0] + temp_board2[i][1] 
-          if k == 2:
-            temp_board2[i][0] = temp_board2[i][1]*2
-            temp_board2[i][1] = temp_board2[i][2]*2
-            temp_board2[i][2] = 0
-            temp_board2[i][3] = 0
-            l_tree_moves2 += temp_board2[i][0] + temp_board2[i][1]  
-          if k == 3:
-            temp_board2[i][0] = temp_board2[i][1]*2
-            temp_board2[i][1] = temp_board2[i][2]*2
-            temp_board2[i][2] = 0
-            temp_board2[i][3] = 0
-            l_tree_moves3 += temp_board2[i][0] + temp_board2[i][1] 
-          if k == 4:
-            temp_board2[i][0] = temp_board2[i][1]*2
-            temp_board2[i][1] = temp_board2[i][2]*2
-            temp_board2[i][2] = 0
-            temp_board2[i][3] = 0
-            l_tree_moves4 += temp_board2[i][0] + temp_board2[i][1] 
-        else:        
-          if k == 0:
-            temp_board2[i][0] = temp_board2[i][1]*2
-            temp_board2[i][1] = temp_board2[i][2] 
-            temp_board2[i][2] = temp_board2[i][3]
-            temp_board2[i][3] = 0
-            l_moves += temp_board2[i][0] 
-          if k == 1:
-            temp_board2[i][0] = temp_board2[i][1]*2
-            temp_board2[i][1] = temp_board2[i][2] 
-            temp_board2[i][2] = temp_board2[i][3]
-            temp_board2[i][3] = 0
-            l_tree_moves1 += temp_board2[i][0] 
-          if k == 2:
-            temp_board2[i][0] = temp_board2[i][1]*2
-            temp_board2[i][1] = temp_board2[i][2] 
-            temp_board2[i][2] = temp_board2[i][3]
-            temp_board2[i][3] = 0
-            l_tree_moves2 += temp_board2[i][0]   
-          if k == 3:
-            temp_board2[i][0] = temp_board2[i][1]*2
-            temp_board2[i][1] = temp_board2[i][2] 
-            temp_board2[i][2] = temp_board2[i][3]
-            temp_board2[i][3] = 0
-            l_tree_moves3 += temp_board2[i][0] 
-          if k == 4:
-            temp_board2[i][0] = temp_board2[i][1]*2
-            temp_board2[i][1] = temp_board2[i][2] 
-            temp_board2[i][2] = temp_board2[i][3]
-            temp_board2[i][3] = 0
-            l_tree_moves4 += temp_board2[i][0] 
-
-      if temp_board[i][1] != 0 and temp_board[i][1] == temp_board[i][2] :
-        if k == 0:
-          temp_board2[i][1] = temp_board2[i][2]*2
-          temp_board2[i][2] = temp_board2[i][3]
-          temp_board2[i][3] = 0
-          l_moves += temp_board2[i][1] 
-        if k == 1:
-          temp_board2[i][1] = temp_board2[i][2]*2
-          temp_board2[i][2] = temp_board2[i][3]
-          temp_board2[i][3] = 0
-          l_tree_moves1 += temp_board2[i][1] 
-        if k == 2:
-          temp_board2[i][1] = temp_board2[i][2]*2
-          temp_board2[i][2] = temp_board2[i][3]
-          temp_board2[i][3] = 0
-          l_tree_moves2 += temp_board2[i][1]
-        if k == 3:
-          temp_board2[i][1] = temp_board2[i][2]*2
-          temp_board2[i][2] = temp_board2[i][3]
-          temp_board2[i][3] = 0
-          l_tree_moves3 = temp_board2[i][1] 
-        if k == 4:
-          temp_board2[i][1] = temp_board2[i][2]*2
-          temp_board2[i][2] = temp_board2[i][3]
-          temp_board2[i][3] = 0
-          l_tree_moves4 += temp_board2[i][1] 
-
-      if temp_board[i][3] != 0 and temp_board[i][2] == temp_board[i][3]:
-        if k == 0:
-          temp_board2[i][2] = temp_board2[i][3]*2
-          temp_board2[i][3] = 0
-          l_moves += temp_board2[i][2]
-        if k == 1:
-          temp_board2[i][2] = temp_board2[i][3]*2
-          temp_board2[i][3] = 0
-          l_tree_moves1 += temp_board2[i][2]  
-        if k == 2:
-          temp_board2[i][2] = temp_board2[i][3]*2
-          temp_board2[i][3] = 0
-          l_tree_moves2 += temp_board2[i][2] 
-        if k == 3:
-          temp_board2[i][2] = temp_board2[i][3]*2
-          temp_board2[i][3] = 0
-          l_tree_moves3 += temp_board2[i][2] 
-        if k == 4:
-          temp_board2[i][2] = temp_board2[i][3]*2
-          temp_board2[i][3] = 0
-          l_tree_moves4 += temp_board2[i][2]
-          
-    if gboard == temp_board2:
-      if k == 0:
-        l_moves += -100000
-      if k == 1:
-        l_tree_moves1 += -100000
-      if k == 2:
-        l_tree_moves2 += -100000
-      if k == 3:
-        l_tree_moves3 += -100000
-      if k == 4:
-        l_tree_moves4 += -100000
-
-    if max(max(temp_board2)) == temp_board2[3][3]:
-      if k == 0:
-        l_moves += 100
-      if k == 1:
-        l_tree_moves1 += 100
-      if k == 2:
-        l_tree_moves2 += 100
-      if k == 3:
-        l_tree_moves3 += 100
-      if k == 4:
-        l_tree_moves4 += 100 
-     
-    if k == 4:
-      l_tree_moves.append(l_tree_moves1)
-      l_tree_moves.append(l_tree_moves2)
-      l_tree_moves.append(l_tree_moves3)
-      l_tree_moves.append(l_tree_moves4)
-      l_moves += max(l_tree_moves)
-
-    combine()    
-
-    if k == 1:
-      shiftup()
-    if k == 2:
-      shiftdown()
-    if k == 3:
-      shiftleft()
-    if k == 4:
-      shiftright()
-
-    temp_board2 = [[0 for x in range(w)] for y in range(h)]    
-    temp_board2 = temp_board
-    r_tree_moves = []
-    #shift right with points
-    for i in range(0, 4):
-      if temp_board2[i][2] != 0 and temp_board2[i][3] == 0:
-        temp_board2[i][3] = temp_board2[i][2]
-        temp_board2[i][2] = 0
-      
-      if temp_board2[i][1] != 0 and temp_board2[i][2] == 0:
-        temp_board2[i][2] = temp_board2[i][1]
-        temp_board2[i][1] = 0
-        if temp_board2[i][3] == 0:
-          temp_board2[i][3] = temp_board2[i][2]
-          temp_board2[i][2] = 0
-      
-      if temp_board2[i][0] != 0 and temp_board[i][1] == 0:
-        temp_board2[i][1] = temp_board[i][0]
-        temp_board2[i][0] = 0
-        if temp_board2[i][2] == 0:
-          temp_board2[i][2] = temp_board2[i][1]
-          temp_board2[i][1] = 0
-          if temp_board2[i][3] == 0:
-            temp_board2[i][3] = temp_board2[i][2]
-            temp_board2[i][2] = 0
- 
-      if temp_board2[i][3] != 0 and temp_board2[i][3] == temp_board2[i][2]:
-        if temp_board2[i][1] == temp_board2[i][0]:
-          if k == 0:
-            temp_board2[i][3] = temp_board2[i][2]*2
-            temp_board2[i][2] = temp_board2[i][1]*2
-            temp_board2[i][1] = 0
-            temp_board2[i][0] = 0
-            r_moves += temp_board2[i][3] + temp_board2[i][2] 
-          if k == 1:
-            temp_board2[i][3] = temp_board2[i][2]*2
-            temp_board2[i][2] = temp_board2[i][1]*2
-            temp_board2[i][1] = 0
-            temp_board2[i][0] = 0
-            r_tree_moves1 = temp_board2[i][3] + temp_board2[i][2] 
-          if k == 2:
-            temp_board2[i][3] = temp_board2[i][2]*2
-            temp_board2[i][2] = temp_board2[i][1]*2
-            temp_board2[i][1] = 0
-            temp_board2[i][0] = 0
-            r_tree_moves2 = temp_board2[i][3] + temp_board2[i][2]  
-          if k == 3:
-            temp_board2[i][3] = temp_board2[i][2]*2
-            temp_board2[i][2] = temp_board2[i][1]*2
-            temp_board2[i][1] = 0
-            temp_board2[i][0] = 0
-            r_tree_moves3 = temp_board2[i][3] + temp_board2[i][2]
-          if k == 4:
-            temp_board2[i][3] = temp_board2[i][2]*2
-            temp_board2[i][2] = temp_board2[i][1]*2
-            temp_board2[i][1] = 0
-            temp_board2[i][0] = 0
-            r_tree_moves4 += temp_board2[i][3] + temp_board2[i][2] 
-        else:        
-          if k == 0:
-            temp_board2[i][3] = temp_board2[i][2]*2
-            temp_board2[i][2] = temp_board2[i][1] 
-            temp_board2[i][1] = temp_board2[i][0]
-            temp_board2[i][0] = 0
-            r_moves += temp_board2[i][3] 
-          if k == 1:
-            temp_board2[i][3] = temp_board2[i][2]*2
-            temp_board2[i][2] = temp_board2[i][1] 
-            temp_board2[i][1] = temp_board2[i][0]
-            temp_board2[i][0] = 0
-            r_tree_moves1 += temp_board2[i][3] 
-          if k == 2:
-            temp_board2[i][3] = temp_board2[i][2]*2
-            temp_board2[i][2] = temp_board2[i][1] 
-            temp_board2[i][1] = temp_board2[i][0]
-            temp_board2[i][0] = 0
-            r_tree_moves2 += temp_board2[i][3]   
-          if k == 3:
-            temp_board2[i][3] = temp_board2[i][2]
-            temp_board2[i][2] = temp_board2[i][1] 
-            temp_board2[i][1] = temp_board2[i][0]
-            temp_board2[i][0] = 0
-            r_tree_moves3 += temp_board2[i][3] 
-          if k == 4:
-            temp_board2[i][3] = temp_board2[i][2]*2
-            temp_board2[i][2] = temp_board2[i][1] 
-            temp_board2[i][1] = temp_board2[i][0]
-            temp_board2[i][0] = 0
-            r_tree_moves4 += temp_board2[i][3] 
-
-      if temp_board[i][2] != 0 and temp_board[i][2] == temp_board[i][1]:
-        if k == 0:
-          temp_board[i][2] = temp_board[i][1]*2
-          temp_board[i][1] = temp_board[i][0]
-          temp_board[i][0] = 0
-          r_moves += temp_board2[i][2] 
-        if k == 1:
-          temp_board[i][2] = temp_board[i][1]*2
-          temp_board[i][1] = temp_board[i][0]
-          temp_board[i][0] = 0 
-          r_tree_moves1 += temp_board2[i][2] 
-        if k == 2:
-          temp_board2[i][2] = temp_board2[i][1]*2
-          temp_board2[i][1] = temp_board2[i][0]
-          temp_board2[i][0] = 0
-          r_tree_moves2 += temp_board2[i][2]
-        if k == 3:
-          temp_board2[i][2] = temp_board2[i][1]*2
-          temp_board2[i][1] = temp_board2[i][0]
-          temp_board2[i][0] = 0
-          r_tree_moves3 = temp_board2[i][2] 
-        if k == 4:
-          temp_board2[i][2] = temp_board2[i][1]*2
-          temp_board2[i][1] = temp_board2[i][0]
-          temp_board2[i][0] = 0
-          r_tree_moves4 += temp_board2[i][2] 
-
-      if temp_board[i][1] != 0 and temp_board[i][1] == temp_board[i][0]:
-        if k == 0:
-          temp_board2[i][1] = temp_board2[i][1]*2
-          temp_board2[i][0] = 0
-          r_moves += temp_board2[i][1]
-        if k == 1:
-          temp_board2[i][1] = temp_board2[i][0]*2
-          temp_board2[i][0] = 0
-          r_tree_moves1 += temp_board2[i][1]  
-        if k == 2:
-          temp_board2[i][1] = temp_board2[i][0]*2
-          temp_board2[i][0] = 0
-          r_tree_moves2 += temp_board2[i][1] 
-        if k == 3:
-          temp_board2[i][1] = temp_board2[i][0]*2
-          temp_board2[i][0] = 0
-          r_tree_moves3 += temp_board2[i][1] 
-        if k == 4:
-          temp_board[i][1] = temp_board[i][0]*2
-          temp_board[i][0] = 0  
-          r_tree_moves4 += temp_board2[i][1] 
-          
-    if gboard == temp_board2:
-      if k == 0:
-        r_moves += -100000
-      if k == 1:
-        r_tree_moves1 += -100000
-      if k == 2:
-        r_tree_moves2 += -100000
-      if k == 3:
-        r_tree_moves3 += -100000
-      if k == 4:
-        r_tree_moves4 += -100000
-
-    if max(max(temp_board2)) == temp_board2[3][3]:
-      if k == 0:
-        r_moves += 100
-      if k == 1:
-        r_tree_moves1 += 100
-      if k == 2:
-        r_tree_moves2 += 100
-      if k == 3:
-        r_tree_moves3 += 100
-      if k == 4:
-        r_tree_moves4 += 100 
-
-    if k == 4:
-      r_tree_moves.append(r_tree_moves1)
-      r_tree_moves.append(r_tree_moves2)
-      r_tree_moves.append(r_tree_moves3)
-      r_tree_moves.append(r_tree_moves4)
-      r_moves += max(r_tree_moves)
+          temp_board[0][j] = temp_board[1][j]*2
+          temp_board[1][j] = temp_board[2][j]
+          temp_board[2][j] = temp_board[3][j]
+          temp_board[3][j] = 0
+          tree_moves[0] = temp_board[0][j] + tree_moves[0]
+       
+      if temp_board[2][j] != 0 and temp_board[2][j] == temp_board[1][j]:
+        temp_board[1][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[3][j]
+        temp_board[3][j] = 0
+        tree_moves[0] = temp_board[1][j] + tree_moves[0]
         
-    combine()
+      if temp_board[3][j] != 0 and temp_board[2][j] == temp_board[3][j]:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[3][j] = 0
+        tree_moves[0] = temp_board[3][j] + temp_board[2][j] + tree_moves[0]
   
-  print(u_moves)
-   
-  print(d_moves)
+  combine()
+  #shiftdown trees 4
+  for j in range(0, 4):
+    if temp_board[2][j] != 0:
+      if temp_board[3][j] == 0:
+        temp_board[3][j] = temp_board[2][j]
+        temp_board[2][j] = 0
+      
+    if temp_board[1][j] != 0:
+      if temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+        if temp_board[3][j] == 0:
+          temp_board[3][j] = temp_board[2][j]
+          temp_board[2][j] = 0
+      
+    if temp_board[0][j] != 0 and temp_board[1][j] == 0:
+      temp_board[1][j] = temp_board[0][j]
+      temp_board[0][j] = 0
+      if temp_board[2][j] == 0:
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = 0
+        if temp_board[3][j] == 0:
+          temp_board[3][j] = temp_board[2][j]
+          temp_board[2][j] = 0
+      
+    if temp_board[3][j] != 0 and temp_board[3][j] == temp_board[2][j]:
+      if temp_board[0][j] == temp_board[1][j]:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[1][j]*2
+        temp_board[1][j] = 0
+        temp_board[0][j] = 0
+        tree_moves[1] = temp_board[3][j] + temp_board[2][j] + tree_moves[1]
+      else:
+        temp_board[3][j] = temp_board[2][j]*2
+        temp_board[2][j] = temp_board[1][j]
+        temp_board[1][j] = temp_board[0][j]
+        temp_board[0][j] = 0
+        tree_moves[1] = temp_board[3][j] + tree_moves[1]
+          
+    if temp_board[2][j] != 0 and temp_board[2][j] == temp_board[1][j]:
+      temp_board[2][j] = temp_board[1][j]*2
+      temp_board[1][j] = temp_board[0][j]
+      temp_board[0][j] = 0
+      tree_moves[1] = temp_board[2][j] + tree_moves[1]
+      
+    if temp_board[1][j] != 0 and temp_board[1][j] == temp_board[0][j]:
+      temp_board[1][j] = temp_board[0][j]*2
+      temp_board[0][j] = 0
+      tree_moves[1] = temp_board[1][j] + tree_moves[1]
+  combine()
+  #shiftleft trees 4
+  for i in range(0, 4):
+    if temp_board[i][1] != 0 and temp_board[i][0] == 0:
+      temp_board[i][0] = temp_board[i][1]
+      temp_board[i][1] = 0
+      
+    if temp_board[i][2] != 0 and temp_board[i][1] == 0:
+      temp_board[i][1] = temp_board[i][2]
+      temp_board[i][2] = 0
+      if temp_board[i][0] == 0:
+        temp_board[i][0] = temp_board[i][1]
+        temp_board[i][1] = 0
+      
+    if temp_board[i][3] != 0 and temp_board[i][2] == 0:
+      temp_board[i][2] = temp_board[i][3]
+      temp_board[i][3] = 0
+      if temp_board[i][1] == 0:
+        temp_board[i][1] = temp_board[i][2]
+        temp_board[i][2] = 0
+        if temp_board[i][0] == 0:
+          temp_board[i][0] = temp_board[i][1]
+          temp_board[i][1] = 0
+      
+    if temp_board[i][0] != 0 and temp_board[i][0] == temp_board[i][1]:
+      if temp_board[i][2] == temp_board[i][3]:  
+        temp_board[i][0] = temp_board[i][1]*2
+        temp_board[i][1] = temp_board[i][2]*2
+        temp_board[i][2] = 0
+        temp_board[i][3] = 0
+        moves[2] = temp_board[i][0] + temp_board[i][1] + moves[2]
+      else:
+        temp_board[i][0] = temp_board[i][1]*2
+        temp_board[i][1] = temp_board[i][2] 
+        temp_board[i][2] = temp_board[i][3]
+        temp_board[i][3] = 0
+        moves[2] = temp_board[i][0] + moves[2]
+      
+    if temp_board[i][2] != 0 and temp_board[i][2] == temp_board[i][1]:
+      temp_board[i][1] = temp_board[i][2]*2
+      temp_board[i][2] = temp_board[i][3]
+      temp_board[i][3] = 0
+      tree_moves[2] = temp_board[i][1] + tree_moves[2]
+      
+    if temp_board[i][3] != 0 and temp_board[i][2] == temp_board[i][3]:
+      temp_board[i][2] = temp_board[i][3]*2
+      temp_board[i][3] = 0
+      tree_moves[2] = temp_board[i][2] + tree_moves[2]
+  combine()
+  #shiftright trees 4
+  for i in range(0, 4):
+    if temp_board[i][2] != 0 and temp_board[i][3] == 0:
+      temp_board[i][3] = temp_board[i][2]
+      temp_board[i][2] = 0
+      
+    if temp_board[i][1] != 0 and temp_board[i][2] == 0:
+      temp_board[i][2] = temp_board[i][1]
+      temp_board[i][1] = 0
+      if temp_board[i][3] == 0:
+        temp_board[i][3] = temp_board[i][2]
+        temp_board[i][2] = 0
+      
+    if temp_board[i][0] != 0 and temp_board[i][1] == 0:
+      temp_board[i][1] = temp_board[i][0]
+      temp_board[i][0] = 0
+      if temp_board[i][2] == 0:
+        temp_board[i][2] = temp_board[i][1]
+        temp_board[i][1] = 0
+        if temp_board[i][3] == 0:
+          temp_board[i][3] = temp_board[i][2]
+          temp_board[i][2] = 0
+      
+    if temp_board[i][3] != 0 and temp_board[i][3] == temp_board[i][2]:
+      if temp_board[i][0] == temp_board[i][1]:
+        temp_board[i][3] = temp_board[i][2]*2
+        temp_board[i][2] = temp_board[i][1]*2
+        temp_board[i][1] = 0
+        temp_board[i][0] = 0
+        tree_moves[3] = temp_board[i][3] + temp_board[i][2] + tree_moves[3]
+      else:
+        temp_board[i][3] = temp_board[i][2]*2
+        temp_board[i][2] = temp_board[i][1]
+        temp_board[i][1] = temp_board[i][0]
+        temp_board[i][0] = 0
+        tree_moves[3] = temp_board[i][3] + tree_moves[3]
+      
+    if temp_board[i][2] != 0 and temp_board[i][2] == temp_board[i][1]:
+      temp_board[i][2] = temp_board[i][1]*2
+      temp_board[i][1] = temp_board[i][0]
+      temp_board[i][0] = 0
+      tree_moves[3] = temp_board[i][2] + tree_moves[3]
+          
+    if temp_board[i][1] != 0 and temp_board[i][1] == temp_board[i][0]:
+      temp_board[i][1] = temp_board[i][0]*2
+      temp_board[i][0] = 0
+      tree_moves[3] = temp_board[i][1] + tree_moves[3]
+  moves[3] = moves[3] + max(tree_moves)
   
-  print(l_moves)
-  
-  print(r_moves)
-  #fix the problem 
 
-  if u_moves > d_moves and u_moves > l_moves and u_moves > r_moves:
+  if max(moves) == moves[1] and max(moves) == moves[2]:
+    pyautogui.press('down')
+  
+  elif max(moves) == moves[0]:
     pyautogui.press('up')
-    print('board is moving up')
-  if d_moves > u_moves and d_moves > l_moves and d_moves > r_moves:
+  elif max(moves) == moves[1]:
     pyautogui.press('down')
-    print('board is moving down')
-  if l_moves > u_moves and l_moves > d_moves and l_moves > r_moves:
+  elif max(moves) == moves[2]:
     pyautogui.press('left')
-    print('board is moving left')
-  if r_moves > u_moves and r_moves > d_moves and r_moves > l_moves:
+  elif max(moves) == moves[3]:
     pyautogui.press('right')
-    print('board is moving right')
-  if r_moves == u_moves and r_moves == d_moves and r_moves == l_moves:
-    pyautogui.press('right')
-    print('board is moving right')
-  if d_moves == r_moves and d_moves > l_moves and d_moves > u_moves:
-    pyautogui.press('right')
-    print('board is moving right')
-  if d_moves == u_moves and d_moves > l_moves and d_moves > r_moves:
-    pyautogui.press('down')
-    print('board is moving down')
-  if r_moves == d_moves and r_moves == l_moves and r_moves == u_moves:
-    pyautogui.press('right')
-    print('board is moving right')
-  if u_moves == l_moves and l_moves > d_moves and l_moves > r_moves:
-    pyautogui.press('left')
-    print('board is moving left')
-  if r_moves > u_moves and r_moves == d_moves and r_moves == l_moves:
-    pyautogui.press('right')
-    print('board is moving right')
-  if r_moves == l_moves and r_moves > u_moves and r_moves > d_moves:
-    pyautogui.press('right')
-    print('board is moving right')
-  if d_moves == l_moves and l_moves > u_moves and l_moves > r_moves:
-    pyautogui.press('down')
-    print('board is moving down')
-  if r_moves == d_moves and r_moves == u_moves and r_moves > l_moves:
-    pyautogui.prees('right')
-    print('board is moving right')
-
-count = 0
+  
 while True:
-  count += 1
   im = pyautogui.screenshot()
   gboard = [[0 for x in range(w)] for y in range(h)] 
   for i in range(0, 4):
@@ -1049,18 +1085,13 @@ while True:
             gboard[i][j] = 256
         if board_space == (237, 200, 80, 255):
             gboard[i][j] = 512 
-  
+
   print_board()
   print(' ')
-  if count == 1:
-    time.sleep(1) 
-    pyautogui.press('right')
-  if count == 2:
-    time.sleep(1)
-    pyautogui.press('down')
-  if count > 2:
-    brute_move()
-    time.sleep(1)
+  brute_move() 
+  print_board()
+  print(' ')
+
 
 
 
